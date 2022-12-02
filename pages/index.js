@@ -1,34 +1,56 @@
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import React, { Component, createRef } from 'react'
+import React, { Component, createRef, useEffect, useState } from 'react'
 import UserRepository from '../src/repositories/UserRepository'
 import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
 import {users} from '../mock/users'
 
+const userRepository = new UserRepository({users});
+
 function Home({users}) {
   const formRef = createRef();
+  const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
+  const [isMarkedShowOnly, setMarkedShowOnly] = useState(true);
+
+  const getCheckedUsers = () => {
+    userRepository.letChangeChekedUsers(new Map(modifiedCheckboxes));
+  }
+
+  const letShowMarkedOnly = () => {
+    console.log(modifiedCheckboxes);
+  }
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <form ref={formRef} onSubmit={(evt) => {
           evt.preventDefault();
-          console.log(new FormData(formRef.current).get(`user-name`));
+
+          getCheckedUsers();
+
+          if (isMarkedShowOnly) {
+            letShowMarkedOnly();
+          }
+
           formRef.current.reset();
         }}>
           <label htmlFor="user-name">Введите имя полностью или частично</label>
-          <input name="user-name"/>
-          <button type="submit">Фильтровать</button>
+          <input style={{marginLeft: '0.5em'}} name="user-name"/>
+          <button style={{marginLeft: '3em'}} type="submit">Фильтровать</button>
+          <div className='page-user-sorting'>
+            <Checkbox onChange={(evt, data) => setMarkedShowOnly(!data.checked)} style={{marginTop: '2em'}} label='Показать только отмеченные' />
+          </div>
         </form>
         <section className='page-user-cards'>
           <ul className='page-user-cards__list'>
             {
-              users.map(({id, fullName, birthYear, profession, friendsCount}) => {
+              users.map(({isVisible, id, fullName, birthYear, profession, friendsCount}) => {
                 return (
-                  <li key={id}>
+                  isVisible && <li key={id}>
                     <Checkbox
+                      id={id}
                       onChange={(event, data) => {
-                        console.log(data.checked)
+                        setModifiedCheckboxes([...modifiedCheckboxes, [data.id, data.checked]])
                       }}
                     />
                     <Card>
@@ -60,7 +82,6 @@ function Home({users}) {
 }
 
 export async function getServerSideProps() {
-  const userRepository = new UserRepository({users});
   let data = await userRepository.getAllUsers();
   data = JSON.parse(data);
 

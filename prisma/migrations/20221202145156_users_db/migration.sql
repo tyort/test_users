@@ -4,5 +4,7 @@ CREATE TABLE "User" (
     "fullName" TEXT NOT NULL,
     "birthYear" INTEGER NOT NULL,
     "profession" TEXT NOT NULL,
-    "friendsCount" INTEGER NOT NULL
+    "friendsCount" INTEGER NOT NULL,
+    "isVisible" BOOLEAN NOT NULL,
+    "isChecked" BOOLEAN NOT NULL
 );

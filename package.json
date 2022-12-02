@@ -2,21 +2,27 @@
   "name": "test",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "nodemon ./src/express/index.js"
   },
   "dependencies": {
     "@prisma/client": "^4.7.0",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "express": "^4.18.2",
     "next": "13.0.5",
     "prisma": "^4.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

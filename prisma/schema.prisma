@@ -13,4 +13,6 @@ model User {
   birthYear    Int
   profession   String
   friendsCount Int
+  isVisible    Boolean
+  isChecked    Boolean
 }
