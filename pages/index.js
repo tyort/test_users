@@ -1,37 +1,18 @@
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import React, { Component, createRef, useEffect, useState } from 'react'
-import UserRepository from '../src/repositories/UserRepository'
 import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
-import {users} from '../mock/users'
-
-const userRepository = new UserRepository({users});
 
 function Home({users}) {
   const formRef = createRef();
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(true);
 
-  const getCheckedUsers = () => {
-    userRepository.letChangeChekedUsers(new Map(modifiedCheckboxes));
-  }
-
-  const letShowMarkedOnly = () => {
-    console.log(modifiedCheckboxes);
-  }
-
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <form ref={formRef} onSubmit={(evt) => {
           evt.preventDefault();
-
-          getCheckedUsers();
-
-          if (isMarkedShowOnly) {
-            letShowMarkedOnly();
-          }
-
           formRef.current.reset();
         }}>
           <label htmlFor="user-name">Введите имя полностью или частично</label>
@@ -82,8 +63,9 @@ function Home({users}) {
 }
 
 export async function getServerSideProps() {
-  let data = await userRepository.getAllUsers();
-  data = JSON.parse(data);
+  const res = await fetch(`http://localhost:3002/`)
+  const data = await res.json()
+  console.log(data)
 
   return {
     props: {
