@@ -14,7 +14,7 @@ app.get('/', async (req, res) => {
 
 app.get('/create-users', async (req, res) => {
   const data = await userRepository.createUsers();
-  res.send(data);
+  res.send('Пользователи созданы');
 })
 
 app.listen(PORT, () => {

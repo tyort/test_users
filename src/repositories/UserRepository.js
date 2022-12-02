@@ -7,14 +7,11 @@ export default class UserRepository {
   }
 
   async createUsers() {
-    const users = this.users.map(async (data) => {
+    this.users.forEach(async (data) => {
       await this.prisma.User.create({
         data
       });
     })
-
-    console.log(users);
-    return users;
   }
 
   async letChangeChekedUsers(data) {
@@ -31,6 +28,6 @@ export default class UserRepository {
 
   async getAllUsers() {
     const users = await this.prisma.User.findMany({});
-    return JSON.stringify(users);
+    return users;
   }
 }
