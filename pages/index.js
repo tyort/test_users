@@ -8,20 +8,35 @@ function Home({users}) {
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(true);
 
+  const handleSubmit = async (evt) => {
+    evt.preventDefault()
+    const endpoint = 'http://localhost:3002/filter'
+
+    const data = {
+      isMarkedShowOnly,
+      modifiedCheckboxes
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }
+    await fetch(endpoint, options)
+    formRef.current.reset();
+  }
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <form ref={formRef} onSubmit={(evt) => {
-          evt.preventDefault();
-          formRef.current.reset();
-        }}>
+        <form ref={formRef} onSubmit={handleSubmit}>
           <label htmlFor="user-name">Введите имя полностью или частично</label>
           <input style={{marginLeft: '0.5em'}} name="user-name"/>
           <button style={{marginLeft: '3em'}} type="submit">Фильтровать</button>
-          <div className='page-user-sorting'>
-            <Checkbox onChange={(evt, data) => setMarkedShowOnly(!data.checked)} style={{marginTop: '2em'}} label='Показать только отмеченные' />
-          </div>
         </form>
+        <Checkbox onChange={(evt, data) => setMarkedShowOnly(!data.checked)} style={{marginTop: '2em'}} label='Показать только отмеченные' />
         <section className='page-user-cards'>
           <ul className='page-user-cards__list'>
             {
