@@ -11,6 +11,10 @@ a {
   text-decoration: none;
 }
 
+li {
+  list-style-type: none;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -23,4 +27,12 @@ a {
     color: white;
     background: black;
   }
+}
+
+
+.page-user-cards__list > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 330px;
 }
