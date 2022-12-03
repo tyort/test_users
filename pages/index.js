@@ -6,7 +6,9 @@ import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
 function Home({users}) {
   const formRef = createRef();
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
-  const [isMarkedShowOnly, setMarkedShowOnly] = useState(true);
+  const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
+  const [modifiedUsers, setModifiedUsers] = useState(null);
+  const currentUsers = modifiedUsers || users;
 
   const handleSubmit = async (evt) => {
     evt.preventDefault()
@@ -24,7 +26,9 @@ function Home({users}) {
       },
       body: JSON.stringify(data)
     }
-    await fetch(endpoint, options)
+    const response = await fetch(endpoint, options)
+    const result = await response.json()
+    setModifiedUsers(result)
     formRef.current.reset();
   }
 
@@ -36,14 +40,19 @@ function Home({users}) {
           <input style={{marginLeft: '0.5em'}} name="user-name"/>
           <button style={{marginLeft: '3em'}} type="submit">Фильтровать</button>
         </form>
-        <Checkbox onChange={(evt, data) => setMarkedShowOnly(!data.checked)} style={{marginTop: '2em'}} label='Показать только отмеченные' />
+        <Checkbox
+          onChange={(evt, data) => setMarkedShowOnly(data.checked)}
+          style={{marginTop: '2em'}}
+          label='Показать только отмеченные'
+        />
         <section className='page-user-cards'>
           <ul className='page-user-cards__list'>
             {
-              users.map(({isVisible, id, fullName, birthYear, profession, friendsCount}) => {
+              currentUsers.map(({isVisible, id, isChecked, fullName, birthYear, profession, friendsCount}) => {
                 return (
                   isVisible && <li key={id}>
                     <Checkbox
+                      defaultChecked={isChecked}
                       id={id}
                       onChange={(event, data) => {
                         setModifiedCheckboxes([...modifiedCheckboxes, [data.id, data.checked]])
@@ -80,7 +89,6 @@ function Home({users}) {
 export async function getServerSideProps() {
   const res = await fetch(`http://localhost:3002/`)
   const data = await res.json()
-  console.log(data)
 
   return {
     props: {

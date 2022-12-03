@@ -11,13 +11,16 @@ app.use(express.json());
 const PORT = 3002;
 
 app.get('/', async (req, res) => {
+  await userRepository.setAllUsersVisible();
   const data = await userRepository.getAllUsers();
   res.json(data);
 })
 
 app.post('/filter', async (req, res) => {
-  console.log(new Map(req.body.modifiedCheckboxes));
-  res.send('Привет');
+  await userRepository.setFilters(req.body);
+  await userRepository.updateAllUsers();
+  const data = await userRepository.getAllUsers();
+  res.json(data);
 })
 
 app.get('/create-users', async (req, res) => {

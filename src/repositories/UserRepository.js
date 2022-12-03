@@ -4,6 +4,9 @@ export default class UserRepository {
   constructor({users}) {
     this.prisma = prisma;
     this.users = users;
+    this.usersDB = [];
+    this.isMarkedShowOnly = false;
+    this.modifiedCheckboxes = null;
   }
 
   async createUsers() {
@@ -14,20 +17,53 @@ export default class UserRepository {
     })
   }
 
-  async letChangeChekedUsers(data) {
-    // data.forEach(async (value, key) => {
-    //   await prisma.User.update({
-    //     where: { id: 1 },
-    //     data: { email: 'alice@prisma.io' },
-    //   })
-    // });
-    for (const [key, value] of data) {
-      console.log(`${key} = ${value}`);
+  async updateAllUsers() {
+    if (this.isMarkedShowOnly) {
+      await this.prisma.User.updateMany({
+        where: {
+          AND: [
+            {isChecked: false},
+            {isVisible: true}
+          ]
+        },
+        data: {isVisible: false}
+      });
+    } else {
+      await this.prisma.User.updateMany({
+        where: {isVisible: false},
+        data: {isVisible: true}
+      });
     }
+
+    for (const [id, isChecked] of this.modifiedCheckboxes) {
+      let isVisible = true;
+
+      if (this.isMarkedShowOnly && !isChecked) {
+        isVisible = false;
+      }
+
+      await this.prisma.User.update({
+        where: { id },
+        data: { isChecked, isVisible },
+      })
+    }
+  }
+
+  async setFilters(data) {
+    const {isMarkedShowOnly, modifiedCheckboxes} = data;
+    this.isMarkedShowOnly = isMarkedShowOnly;
+    this.modifiedCheckboxes = new Map(modifiedCheckboxes);
+  }
+
+  async setAllUsersVisible() {
+    await this.prisma.User.updateMany({
+      data: {isVisible: true}
+    });
   }
 
   async getAllUsers() {
     const users = await this.prisma.User.findMany({});
+    this.usersDB = users;
     return users;
   }
 }
