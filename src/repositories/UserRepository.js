@@ -17,7 +17,7 @@ export default class UserRepository {
     })
   }
 
-  async updateAllUsers() {
+  async updateAllUsersByCheckbox() {
     if (this.isMarkedShowOnly) {
       await this.prisma.User.updateMany({
         where: {
@@ -50,9 +50,10 @@ export default class UserRepository {
   }
 
   async setFilters(data) {
-    const {isMarkedShowOnly, modifiedCheckboxes} = data;
+    const {isMarkedShowOnly, modifiedCheckboxes, userIdForVisual} = data;
     this.isMarkedShowOnly = isMarkedShowOnly;
     this.modifiedCheckboxes = new Map(modifiedCheckboxes);
+    this.userIdForVisual = userIdForVisual;
   }
 
   async setAllUsersVisible() {

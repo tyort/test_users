@@ -11,12 +11,24 @@ function Home({users}) {
   const currentUsers = modifiedUsers || users;
 
   const handleSubmit = async (evt) => {
-    evt.preventDefault()
-    const endpoint = 'http://localhost:3002/filter'
+    evt.preventDefault();
+    const endpoint = 'http://localhost:3002/filter';
+    const searchData = evt.target['user-name'].value;
+    let userIdForVisual = users.map((user) => user.id);
+
+    if (searchData !== '') {
+      const regExpName = new RegExp(searchData, 'gmi');
+      userIdForVisual = users
+        .filter((user) => {
+          return !!user.fullName.match(regExpName);
+        })
+        .map((user) => user.id);
+    }
 
     const data = {
       isMarkedShowOnly,
-      modifiedCheckboxes
+      modifiedCheckboxes,
+      userIdForVisual
     }
 
     const options = {

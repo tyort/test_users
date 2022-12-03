@@ -1,7 +1,7 @@
-import express from "express"
 import cors from 'cors';
-import UserRepository from "../repositories/UserRepository.js"
-import {users} from "../../mock/users.js"
+import express from "express";
+import { users } from "../../mock/users.js";
+import UserRepository from "../repositories/UserRepository.js";
 
 const userRepository = new UserRepository({users})
 
@@ -18,7 +18,7 @@ app.get('/', async (req, res) => {
 
 app.post('/filter', async (req, res) => {
   await userRepository.setFilters(req.body);
-  await userRepository.updateAllUsers();
+  await userRepository.updateAllUsersByCheckbox();
   const data = await userRepository.getAllUsers();
   res.json(data);
 })
@@ -28,6 +28,4 @@ app.get('/create-users', async (req, res) => {
   res.send('Пользователи созданы');
 })
 
-app.listen(PORT, () => {
-  console.log('Сервер запущен')
-});
+app.listen(PORT);
