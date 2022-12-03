@@ -18,13 +18,6 @@ function Home() {
   console.log(users)
   const currentUsers = users;
   const initialOrder = currentUsers.map((user) => user !== null && user.id)
-  const [order, setOrder] = useLocalStorage(initialOrder, 'order');
-
-  useEffect(() => {
-    if (JSON.stringify(order) !== JSON.stringify(initialOrder)) {
-      setOrder(initialOrder);
-    }
-  }, [initialOrder])
 
   useEffect(() => {
     if (fetching) {
@@ -73,7 +66,7 @@ function Home() {
       isMarkedShowOnly,
       modifiedCheckboxes,
       userIdForVisual,
-      order
+      order: initialOrder
     }
 
     const options = {
