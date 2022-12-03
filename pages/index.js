@@ -11,13 +11,12 @@ function Home() {
   const [users, setUsers] = useState([]);
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
-  const [modifiedUsers, setModifiedUsers] = useState(null);
 
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true) // true- подгружаем данные
 
-  const currentUsers = modifiedUsers || users;
-  console.log(currentUsers)
+  console.log(users)
+  const currentUsers = users;
   const initialOrder = currentUsers.map((user) => user !== null && user.id)
   const [order, setOrder] = useLocalStorage(initialOrder, 'order');
 
@@ -86,7 +85,7 @@ function Home() {
     }
     const response = await fetch(endpoint, options)
     const result = await response.json()
-    setModifiedUsers(result)
+    setUsers(result)
   }
 
   return (
@@ -107,7 +106,7 @@ function Home() {
             className='page-user-cards__list'
             axys="y"
             values={currentUsers}
-            onReorder={setModifiedUsers}
+            onReorder={setUsers}
           >
             {
               currentUsers.map((user) => {
