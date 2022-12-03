@@ -3,6 +3,7 @@ import styles from '../styles/Home.module.css'
 import React, { Component, createRef, useEffect, useState } from 'react'
 import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
 import { Reorder } from 'framer-motion';
+import {useLocalStorage} from '../lib/useLocalStorage';
 
 function Home({users}) {
   const formRef = createRef();
@@ -11,6 +12,10 @@ function Home({users}) {
   const [modifiedUsers, setModifiedUsers] = useState(null);
   console.log(modifiedUsers);
   const currentUsers = modifiedUsers || users;
+  const kfkkek = currentUsers.map((user) => user.id)
+  const [order, setOrder] = useLocalStorage(kfkkek, 'order');
+  console.log(order);
+
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
