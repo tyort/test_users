@@ -11,7 +11,8 @@ function Home({users}) {
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
   const currentUsers = modifiedUsers || users;
-  const initialOrder = currentUsers.map((user) => user.id)
+  console.log(currentUsers)
+  const initialOrder = currentUsers.map((user) => user !== null && user.id)
   const [order, setOrder] = useLocalStorage(initialOrder, 'order');
 
   useEffect(() => {
@@ -51,6 +52,7 @@ function Home({users}) {
     }
     const response = await fetch(endpoint, options)
     const result = await response.json()
+    console.log(result)
     setModifiedUsers(result)
   }
 
@@ -76,6 +78,9 @@ function Home({users}) {
           >
             {
               currentUsers.map((user) => {
+                if (user === null) {
+                  return '';
+                }
                 const {isVisible, id, isChecked, fullName, birthYear, profession, friendsCount} = user;
                 return (
                   isVisible && <Reorder.Item value={user} key={id}>

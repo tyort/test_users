@@ -78,10 +78,19 @@ export default class UserRepository {
 
   async getAllUsers() {
     let users = await this.prisma.User.findMany({});
-    console.log(this.usersOrder);
 
-    // users = this.usersOrder.map((orderNumber) => users.find((user) => user.id === orderNumber))
-    
+    if (this.usersOrder) {
+      let allId = users.map((sad) => sad.id);
+      console.log(this.usersOrder)
+      console.log(allId)
+      let order = Array.from(new Set([...this.usersOrder, ...allId]));
+      console.log(order);
+      users = users.map((_user, index, arr) => {
+        return arr.find((item) => item.id === order[index])
+      });
+    }
+
+    console.log(users);
     return users;
   }
 }
