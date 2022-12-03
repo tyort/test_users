@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import React, { Component, createRef, useEffect, useState } from 'react'
+import axios from 'axios';
 import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
 import { Reorder } from 'framer-motion';
 import {useLocalStorage} from '../lib/useLocalStorage';
@@ -11,6 +12,7 @@ function Home({users}) {
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
   const currentUsers = modifiedUsers || users;
+  console.log(currentUsers)
   const initialOrder = currentUsers.map((user) => user !== null && user.id)
   const [order, setOrder] = useLocalStorage(initialOrder, 'order');
 
@@ -20,9 +22,10 @@ function Home({users}) {
     }
   }, [initialOrder])
 
+  
+
   useEffect(() => {
     document.addEventListener('scroll', scrollhandler)
-
     return function() {
       document.removeEventListener('scroll', scrollhandler)
     }
