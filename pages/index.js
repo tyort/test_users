@@ -10,12 +10,15 @@ function Home({users}) {
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
-  console.log(modifiedUsers);
   const currentUsers = modifiedUsers || users;
-  const kfkkek = currentUsers.map((user) => user.id)
-  const [order, setOrder] = useLocalStorage(kfkkek, 'order');
-  console.log(order);
+  const initialOrder = currentUsers.map((user) => user.id)
+  const [order, setOrder] = useLocalStorage(initialOrder, 'order');
 
+  useEffect(() => {
+    if (JSON.stringify(order) !== JSON.stringify(initialOrder)) {
+      setOrder(initialOrder);
+    }
+  }, [initialOrder])
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
