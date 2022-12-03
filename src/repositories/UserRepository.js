@@ -81,16 +81,12 @@ export default class UserRepository {
 
     if (this.usersOrder) {
       let allId = users.map((sad) => sad.id);
-      console.log(this.usersOrder)
-      console.log(allId)
       let order = Array.from(new Set([...this.usersOrder, ...allId]));
-      console.log(order);
       users = users.map((_user, index, arr) => {
         return arr.find((item) => item.id === order[index])
       });
     }
 
-    console.log(users);
     return users;
   }
 }

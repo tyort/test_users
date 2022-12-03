@@ -11,7 +11,6 @@ function Home({users}) {
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
   const currentUsers = modifiedUsers || users;
-  console.log(currentUsers)
   const initialOrder = currentUsers.map((user) => user !== null && user.id)
   const [order, setOrder] = useLocalStorage(initialOrder, 'order');
 
@@ -20,6 +19,18 @@ function Home({users}) {
       setOrder(initialOrder);
     }
   }, [initialOrder])
+
+  useEffect(() => {
+    document.addEventListener('scroll', scrollhandler)
+
+    return function() {
+      document.removeEventListener('scroll', scrollhandler)
+    }
+  }, [])
+
+  const scrollhandler = () => {
+    console.log('Привет');
+  }
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -52,7 +63,6 @@ function Home({users}) {
     }
     const response = await fetch(endpoint, options)
     const result = await response.json()
-    console.log(result)
     setModifiedUsers(result)
   }
 
