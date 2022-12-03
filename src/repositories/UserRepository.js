@@ -7,6 +7,7 @@ export default class UserRepository {
     this.usersDB = [];
     this.isMarkedShowOnly = false;
     this.modifiedCheckboxes = null;
+    this.usersOrder = null;
   }
 
   async createUsers() {
@@ -62,10 +63,11 @@ export default class UserRepository {
   }
 
   async setFilters(data) {
-    const {isMarkedShowOnly, modifiedCheckboxes, userIdForVisual} = data;
+    const {order, isMarkedShowOnly, modifiedCheckboxes, userIdForVisual} = data;
     this.isMarkedShowOnly = isMarkedShowOnly;
     this.modifiedCheckboxes = new Map(modifiedCheckboxes);
     this.userIdForVisual = userIdForVisual;
+    this.usersOrder = order
   }
 
   async setAllUsersVisible() {
@@ -75,8 +77,11 @@ export default class UserRepository {
   }
 
   async getAllUsers() {
-    const users = await this.prisma.User.findMany({});
-    this.usersDB = users;
+    let users = await this.prisma.User.findMany({});
+    console.log(this.usersOrder);
+
+    // users = this.usersOrder.map((orderNumber) => users.find((user) => user.id === orderNumber))
+    
     return users;
   }
 }

@@ -38,7 +38,8 @@ function Home({users}) {
     const data = {
       isMarkedShowOnly,
       modifiedCheckboxes,
-      userIdForVisual
+      userIdForVisual,
+      order
     }
 
     const options = {
