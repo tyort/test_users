@@ -19,6 +19,7 @@ app.get('/', async (req, res) => {
 app.post('/filter', async (req, res) => {
   await userRepository.setFilters(req.body);
   await userRepository.updateAllUsersByCheckbox();
+  await userRepository.updateAllUsersBySearch();
   const data = await userRepository.getAllUsers();
   res.json(data);
 })

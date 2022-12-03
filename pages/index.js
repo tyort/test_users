@@ -41,7 +41,6 @@ function Home({users}) {
     const response = await fetch(endpoint, options)
     const result = await response.json()
     setModifiedUsers(result)
-    formRef.current.reset();
   }
 
   return (

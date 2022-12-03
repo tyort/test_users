@@ -17,6 +17,18 @@ export default class UserRepository {
     })
   }
 
+  async updateAllUsersBySearch() {
+    await this.prisma.User.updateMany({
+      where: {
+        AND: [
+          {isVisible: true},
+          {id: {notIn: this.userIdForVisual}}
+        ]
+      },
+      data: {isVisible: false}
+    });
+  }
+
   async updateAllUsersByCheckbox() {
     if (this.isMarkedShowOnly) {
       await this.prisma.User.updateMany({
