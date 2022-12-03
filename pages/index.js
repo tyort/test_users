@@ -6,11 +6,16 @@ import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
 import { Reorder } from 'framer-motion';
 import {useLocalStorage} from '../lib/useLocalStorage';
 
-function Home({users}) {
+function Home() {
   const formRef = createRef();
+  const [users, setUsers] = useState([]);
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
+
+  const [currentCount, setCurrentCount] = useState(8);
+  const [fetching, setFetching] = useState(true) // true- подгружаем данные
+
   const currentUsers = modifiedUsers || users;
   console.log(currentUsers)
   const initialOrder = currentUsers.map((user) => user !== null && user.id)
@@ -22,7 +27,17 @@ function Home({users}) {
     }
   }, [initialOrder])
 
-  
+  useEffect(() => {
+    if (fetching) {
+      axios
+      .get(`http://localhost:3002/?limit=${currentCount}`)
+      .then(response => {
+        setUsers(response.data)
+        setCurrentCount(prevState => prevState + 1)
+      })
+      .finally(() => setFetching(false))
+    }
+  }, [fetching])
 
   useEffect(() => {
     document.addEventListener('scroll', scrollhandler)
@@ -31,8 +46,13 @@ function Home({users}) {
     }
   }, [])
 
-  const scrollhandler = () => {
-    console.log('Привет');
+  const scrollhandler = (evt) => {
+    if(evt.target.documentElement.scrollHeight - evt.target.documentElement.scrollTop - window.innerHeight < 100) {
+      setFetching(true);
+    }
+    // console.log(evt.target.documentElement.scrollHeight); // общая высота страницы с учетом скролла
+    // console.log(evt.target.documentElement.scrollTop); // текущее положение скролла
+    // console.log(window.innerHeight); // высота видимой области страницы
   }
 
   const handleSubmit = async (evt) => {
@@ -130,17 +150,6 @@ function Home({users}) {
       </main>
     </div>
   )
-}
-
-export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:3002/`)
-  const data = await res.json()
-
-  return {
-    props: {
-      users: data
-    },
-  };
 }
 
 export default Home;

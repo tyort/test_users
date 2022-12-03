@@ -11,6 +11,7 @@ app.use(express.json());
 const PORT = 3002;
 
 app.get('/', async (req, res) => {
+  userRepository.setLimitCountUsers(req.query.limit)
   await userRepository.setAllUsersVisible();
   const data = await userRepository.getAllUsers();
   res.json(data);

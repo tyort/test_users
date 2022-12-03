@@ -8,6 +8,7 @@ export default class UserRepository {
     this.isMarkedShowOnly = false;
     this.modifiedCheckboxes = null;
     this.usersOrder = null;
+    this.limitCountUsers = null
   }
 
   async createUsers() {
@@ -16,6 +17,10 @@ export default class UserRepository {
         data
       });
     })
+  }
+
+  setLimitCountUsers(count) {
+    this.limitCountUsers = count
   }
 
   async updateAllUsersBySearch() {
@@ -85,6 +90,10 @@ export default class UserRepository {
       users = users.map((_user, index, arr) => {
         return arr.find((item) => item.id === order[index])
       });
+    }
+
+    if (this.limitCountUsers !== null) {
+      users = users.slice(0, this.limitCountUsers);
     }
 
     return users;
