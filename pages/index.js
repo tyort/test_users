@@ -2,12 +2,14 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import React, { Component, createRef, useEffect, useState } from 'react'
 import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react'
+import { Reorder } from 'framer-motion';
 
 function Home({users}) {
   const formRef = createRef();
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
   const [modifiedUsers, setModifiedUsers] = useState(null);
+  console.log(modifiedUsers);
   const currentUsers = modifiedUsers || users;
 
   const handleSubmit = async (evt) => {
@@ -57,11 +59,17 @@ function Home({users}) {
           label='Показать только отмеченные'
         />
         <section className='page-user-cards'>
-          <ul className='page-user-cards__list'>
+          <Reorder.Group
+            className='page-user-cards__list'
+            axys="y"
+            values={currentUsers}
+            onReorder={setModifiedUsers}
+          >
             {
-              currentUsers.map(({isVisible, id, isChecked, fullName, birthYear, profession, friendsCount}) => {
+              currentUsers.map((user) => {
+                const {isVisible, id, isChecked, fullName, birthYear, profession, friendsCount} = user;
                 return (
-                  isVisible && <li key={id}>
+                  isVisible && <Reorder.Item value={user} key={id}>
                     <Checkbox
                       defaultChecked={isChecked}
                       id={id}
@@ -86,11 +94,11 @@ function Home({users}) {
                         </a>
                       </Card.Content>
                     </Card>
-                  </li>
+                  </Reorder.Item>
                 )
               })
             }
-          </ul>
+          </Reorder.Group>
         </section>
       </main>
     </div>
