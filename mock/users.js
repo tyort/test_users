@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export const users = [
   {
     fullName: 'Kate Popova',
@@ -5,7 +6,7 @@ export const users = [
     profession: 'singer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 12
+    friendsCount: 12,
   },
   {
     fullName: 'Ree John',
@@ -13,7 +14,7 @@ export const users = [
     profession: 'soldier',
     isVisible: true,
     isChecked: false,
-    friendsCount: 10
+    friendsCount: 10,
   },
   {
     fullName: 'Tanya Lee',
@@ -21,7 +22,7 @@ export const users = [
     profession: 'dancer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 2
+    friendsCount: 2,
   },
   {
     fullName: 'Rick Nolan',
@@ -29,7 +30,7 @@ export const users = [
     profession: 'manager',
     isVisible: true,
     isChecked: false,
-    friendsCount: 38
+    friendsCount: 38,
   },
   {
     fullName: 'Elton John',
@@ -37,7 +38,7 @@ export const users = [
     profession: 'teacher',
     isVisible: true,
     isChecked: false,
-    friendsCount: 113
+    friendsCount: 113,
   },
   {
     fullName: 'Nina Solf',
@@ -45,7 +46,7 @@ export const users = [
     profession: 'student',
     isVisible: true,
     isChecked: false,
-    friendsCount: 63
+    friendsCount: 63,
   },
   {
     fullName: 'Jack Jack',
@@ -53,7 +54,7 @@ export const users = [
     profession: 'player',
     isVisible: true,
     isChecked: false,
-    friendsCount: 34
+    friendsCount: 34,
   },
   {
     fullName: 'Enzo Gorlami',
@@ -61,7 +62,7 @@ export const users = [
     profession: 'director',
     isVisible: true,
     isChecked: false,
-    friendsCount: 31
+    friendsCount: 31,
   },
   {
     fullName: 'Kila Pony',
@@ -69,7 +70,7 @@ export const users = [
     profession: 'mother',
     isVisible: true,
     isChecked: false,
-    friendsCount: 3
+    friendsCount: 3,
   },
   {
     fullName: 'Kate Popova',
@@ -77,7 +78,7 @@ export const users = [
     profession: 'singer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 12
+    friendsCount: 12,
   },
   {
     fullName: 'Ree John',
@@ -85,7 +86,7 @@ export const users = [
     profession: 'soldier',
     isVisible: true,
     isChecked: false,
-    friendsCount: 10
+    friendsCount: 10,
   },
   {
     fullName: 'Tanya Lee',
@@ -93,7 +94,7 @@ export const users = [
     profession: 'dancer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 2
+    friendsCount: 2,
   },
   {
     fullName: 'Rick Nolan',
@@ -101,7 +102,7 @@ export const users = [
     profession: 'manager',
     isVisible: true,
     isChecked: false,
-    friendsCount: 38
+    friendsCount: 38,
   },
   {
     fullName: 'Elton John',
@@ -109,7 +110,7 @@ export const users = [
     profession: 'teacher',
     isVisible: true,
     isChecked: false,
-    friendsCount: 113
+    friendsCount: 113,
   },
   {
     fullName: 'Nina Solf',
@@ -117,7 +118,7 @@ export const users = [
     profession: 'student',
     isVisible: true,
     isChecked: false,
-    friendsCount: 63
+    friendsCount: 63,
   },
   {
     fullName: 'Jack Jack',
@@ -125,7 +126,7 @@ export const users = [
     profession: 'player',
     isVisible: true,
     isChecked: false,
-    friendsCount: 34
+    friendsCount: 34,
   },
   {
     fullName: 'Enzo Gorlami',
@@ -133,7 +134,7 @@ export const users = [
     profession: 'director',
     isVisible: true,
     isChecked: false,
-    friendsCount: 31
+    friendsCount: 31,
   },
   {
     fullName: 'Kila Pony',
@@ -141,7 +142,7 @@ export const users = [
     profession: 'mother',
     isVisible: true,
     isChecked: false,
-    friendsCount: 3
+    friendsCount: 3,
   },
   {
     fullName: 'Kate Popova',
@@ -149,7 +150,7 @@ export const users = [
     profession: 'singer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 12
+    friendsCount: 12,
   },
   {
     fullName: 'Ree John',
@@ -157,7 +158,7 @@ export const users = [
     profession: 'soldier',
     isVisible: true,
     isChecked: false,
-    friendsCount: 10
+    friendsCount: 10,
   },
   {
     fullName: 'Tanya Lee',
@@ -165,7 +166,7 @@ export const users = [
     profession: 'dancer',
     isVisible: true,
     isChecked: false,
-    friendsCount: 2
+    friendsCount: 2,
   },
   {
     fullName: 'Rick Nolan',
@@ -173,7 +174,7 @@ export const users = [
     profession: 'manager',
     isVisible: true,
     isChecked: false,
-    friendsCount: 38
+    friendsCount: 38,
   },
   {
     fullName: 'Elton John',
@@ -181,7 +182,7 @@ export const users = [
     profession: 'teacher',
     isVisible: true,
     isChecked: false,
-    friendsCount: 113
+    friendsCount: 113,
   },
   {
     fullName: 'Nina Solf',
@@ -189,7 +190,7 @@ export const users = [
     profession: 'student',
     isVisible: true,
     isChecked: false,
-    friendsCount: 63
+    friendsCount: 63,
   },
   {
     fullName: 'Jack Jack',
@@ -197,7 +198,7 @@ export const users = [
     profession: 'player',
     isVisible: true,
     isChecked: false,
-    friendsCount: 34
+    friendsCount: 34,
   },
   {
     fullName: 'Enzo Gorlami',
@@ -205,7 +206,7 @@ export const users = [
     profession: 'director',
     isVisible: true,
     isChecked: false,
-    friendsCount: 31
+    friendsCount: 31,
   },
   {
     fullName: 'Kila Pony',
@@ -213,6 +214,6 @@ export const users = [
     profession: 'mother',
     isVisible: true,
     isChecked: false,
-    friendsCount: 3
+    friendsCount: 3,
   },
 ];

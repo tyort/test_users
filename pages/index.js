@@ -1,23 +1,13 @@
-import Image from 'next/image';
-import React, { Component, createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Input, Menu, Card, Icon, Checkbox } from 'semantic-ui-react';
+import { Card, Icon, Checkbox, Menu, Input, Button } from 'semantic-ui-react';
 import { Reorder } from 'framer-motion';
 import styles from '../styles/Home.module.css';
-import { useLocalStorage } from '../lib/useLocalStorage';
 
 function Home() {
-  const formRef = createRef();
   const [users, setUsers] = useState([]);
-  const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
-  const [isMarkedShowOnly, setMarkedShowOnly] = useState(false);
-
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
-
-  console.log(users);
-  const currentUsers = users;
-  const initialOrder = currentUsers.map((user) => user !== null && user.id);
 
   useEffect(() => {
     if (fetching) {
@@ -47,55 +37,26 @@ function Home() {
 
   useEffect(() => {
     document.addEventListener('scroll', scrollhandler);
+    // eslint-disable-next-line func-names
     return function () {
       document.removeEventListener('scroll', scrollhandler);
     };
   }, []);
 
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
-    const endpoint = 'http://localhost:3002/filter';
-    const searchData = evt.target['user-name'].value;
-    let userIdForVisual = users.map((user) => user.id);
-
-    if (searchData !== '') {
-      const regExpName = new RegExp(searchData, 'gmi');
-      userIdForVisual = users
-        .filter((user) => !!user.fullName.match(regExpName))
-        .map((user) => user.id);
-    }
-
-    const data = {
-      isMarkedShowOnly,
-      modifiedCheckboxes,
-      userIdForVisual,
-      order: initialOrder,
-    };
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(endpoint, options);
-    const result = await response.json();
-    setUsers(result);
-  };
-
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <form ref={formRef} onSubmit={handleSubmit}>
-          <label htmlFor='user-name'>Введите имя полностью или частично</label>
-          <input style={{ marginLeft: '0.5em' }} name='user-name' />
-          <button style={{ marginLeft: '3em' }} type='submit'>
-            Фильтровать
-          </button>
-        </form>
+        <Menu secondary>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Input icon='search' placeholder='Введите имя' />
+            </Menu.Item>
+            <Menu.Item>
+              <Button>Поиск пользователей</Button>
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
         <Checkbox
-          onChange={(evt, data) => setMarkedShowOnly(data.checked)}
           style={{ marginTop: '2em' }}
           label='Показать только отмеченные'
         />
@@ -103,10 +64,10 @@ function Home() {
           <Reorder.Group
             className='page-user-cards__list'
             axys='y'
-            values={currentUsers}
+            values={users}
             onReorder={setUsers}
           >
-            {currentUsers.map((user) => {
+            {users.map((user) => {
               if (user === null) {
                 return '';
               }
@@ -122,16 +83,7 @@ function Home() {
               return (
                 isVisible && (
                   <Reorder.Item value={user} key={id}>
-                    <Checkbox
-                      defaultChecked={isChecked}
-                      id={id}
-                      onChange={(event, data) => {
-                        setModifiedCheckboxes([
-                          ...modifiedCheckboxes,
-                          [data.id, data.checked],
-                        ]);
-                      }}
-                    />
+                    <Checkbox defaultChecked={isChecked} id={id} />
                     <Card>
                       <Card.Content>
                         <Card.Header>{fullName}</Card.Header>
