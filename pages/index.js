@@ -6,27 +6,41 @@ import styles from '../styles/Home.module.css';
 
 function Home() {
   const [users, setUsers] = useState([]);
+  const [orderedUsers, setorderedUsers] = useState(users);
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
 
-  const idCounts = users.map((user) => user.id);
-  const orderForDB = idCounts.reduce(
-    (accumulator, currentValue) => `${accumulator}o${currentValue}`,
-    ''
-  );
+  useEffect(() => {
+    setorderedUsers(users);
+  }, [users]);
 
-  console.log(users);
+  useEffect(() => {
+    axios.post(`http://localhost:3002`, orderedUsers).catch((error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    });
+  }, [orderedUsers]);
+
   useEffect(() => {
     if (fetching) {
       axios
-        .all([
-          axios.get(
-            `http://localhost:3002/reordered/?newOrder=${orderForDB.slice(1)}`
-          ),
-          axios.get(`http://localhost:3002/?limit=${currentCount}`),
-        ])
+        .all([axios.get(`http://localhost:3002/?limit=${currentCount}`)])
         .then(
-          axios.spread((res1, res2) => {
+          axios.spread((res2) => {
             setUsers(res2.data);
             setCurrentCount((prevState) => prevState + 1);
           })
@@ -78,10 +92,10 @@ function Home() {
           <Reorder.Group
             className='page-user-cards__list'
             axys='y'
-            values={users}
-            onReorder={setUsers}
+            values={orderedUsers}
+            onReorder={setorderedUsers}
           >
-            {users.map((user) => {
+            {orderedUsers.map((user) => {
               if (user === null) {
                 return '';
               }

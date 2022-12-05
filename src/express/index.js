@@ -22,4 +22,13 @@ app.get('/', async (req, res) => {
   res.json(data);
 });
 
+app.post('/', async (req, res) => {
+  try {
+    await Promise.all(userRepository.letChangeOrders(req.body));
+    res.send('Все юзеры обновлены');
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 app.listen(PORT);

@@ -9,6 +9,3 @@ CREATE TABLE "User" (
     "isChecked" BOOLEAN NOT NULL,
     "order" INTEGER NOT NULL
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_order_key" ON "User"("order");

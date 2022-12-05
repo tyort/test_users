@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./users.db"
+  url      = "file:./users.db?socket_timeout=100&connection_limit=1"
 }
 
 model User {
@@ -15,5 +15,5 @@ model User {
   friendsCount Int
   isVisible    Boolean
   isChecked    Boolean
-  order        Int      @unique
+  order        Int
 }
