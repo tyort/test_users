@@ -36,7 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 # DB
-*.db
+*.db*
 *.db-journal
 
 #packaje.json
