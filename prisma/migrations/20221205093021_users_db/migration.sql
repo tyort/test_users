@@ -6,11 +6,9 @@ CREATE TABLE "User" (
     "profession" TEXT NOT NULL,
     "friendsCount" INTEGER NOT NULL,
     "isVisible" BOOLEAN NOT NULL,
-    "isChecked" BOOLEAN NOT NULL
+    "isChecked" BOOLEAN NOT NULL,
+    "order" INTEGER NOT NULL
 );
 
--- CreateTable
-CREATE TABLE "Order" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "order" TEXT NOT NULL
-);
+-- CreateIndex
+CREATE UNIQUE INDEX "User_order_key" ON "User"("order");
