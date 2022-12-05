@@ -9,14 +9,28 @@ function Home() {
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
 
+  const idCounts = users.map((user) => user.id);
+  const orderForDB = idCounts.reduce(
+    (accumulator, currentValue) => `${accumulator}o${currentValue}`,
+    ''
+  );
+
+  console.log(users);
   useEffect(() => {
     if (fetching) {
       axios
-        .get(`http://localhost:3002/?limit=${currentCount}`)
-        .then((response) => {
-          setUsers(response.data);
-          setCurrentCount((prevState) => prevState + 1);
-        })
+        .all([
+          axios.get(
+            `http://localhost:3002/reordered/?newOrder=${orderForDB.slice(1)}`
+          ),
+          axios.get(`http://localhost:3002/?limit=${currentCount}`),
+        ])
+        .then(
+          axios.spread((res1, res2) => {
+            setUsers(res2.data);
+            setCurrentCount((prevState) => prevState + 1);
+          })
+        )
         .finally(() => setFetching(false));
     }
   }, [fetching]);

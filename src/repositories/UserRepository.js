@@ -39,7 +39,16 @@ export default class UserRepository {
     });
 
     this.order = orderItemFromDB.order;
-    console.log(this.order);
+  }
+
+  async setNewOrder(newOrder) {
+    const oldOrder = this.order;
+    this.order = `${newOrder}${oldOrder.slice(newOrder.length)}`;
+    await this.prisma.Order.updateMany({
+      data: {
+        order: this.order,
+      },
+    });
   }
 
   async getAllUsers() {

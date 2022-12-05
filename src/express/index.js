@@ -21,6 +21,11 @@ app.get('/create-order', async (req, res) => {
   res.send('Очередь создана');
 });
 
+app.get('/reordered', async (req, res) => {
+  await userRepository.setNewOrder(req.query.newOrder);
+  res.send('Новый порядок установлен');
+});
+
 app.get('/', async (req, res) => {
   userRepository.setLimitCountUsers(req.query.limit);
   const data = await userRepository.getAllUsers();
