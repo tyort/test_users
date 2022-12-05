@@ -43,6 +43,19 @@ export default class UserRepository {
     );
   }
 
+  letChangeCheckboxes(changedCheckboxes) {
+    this.changedCheckboxes = Array.from(new Map(changedCheckboxes));
+
+    return this.changedCheckboxes.map((user) =>
+      this.prisma.User.update({
+        where: { id: Number(user[0]) },
+        data: {
+          isChecked: { set: user[1] },
+        },
+      })
+    );
+  }
+
   async getAllUsers() {
     const users = await this.prisma.User.findMany({
       orderBy: {

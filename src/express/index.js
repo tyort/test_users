@@ -31,4 +31,13 @@ app.post('/', async (req, res) => {
   }
 });
 
+app.post('/checkedboxes', async (req, res) => {
+  try {
+    await Promise.all(userRepository.letChangeCheckboxes(req.body));
+    res.send('Все чекбоксы обновлены');
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 app.listen(PORT);

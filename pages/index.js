@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Icon, Checkbox, Menu, Input, Button } from 'semantic-ui-react';
@@ -7,8 +8,15 @@ import styles from '../styles/Home.module.css';
 function Home() {
   const [users, setUsers] = useState([]);
   const [orderedUsers, setorderedUsers] = useState(users);
+  const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
+
+  useEffect(() => {
+    if (modifiedCheckboxes.length !== 0) {
+      axios.post(`http://localhost:3002/checkedboxes`, modifiedCheckboxes);
+    }
+  }, [modifiedCheckboxes]);
 
   useEffect(() => {
     setorderedUsers(users);
@@ -111,7 +119,16 @@ function Home() {
               return (
                 isVisible && (
                   <Reorder.Item value={user} key={id}>
-                    <Checkbox defaultChecked={isChecked} id={id} />
+                    <Checkbox
+                      onChange={(_event, data) => {
+                        setModifiedCheckboxes([
+                          ...modifiedCheckboxes,
+                          [data.id, data.checked],
+                        ]);
+                      }}
+                      defaultChecked={isChecked}
+                      id={id}
+                    />
                     <Card>
                       <Card.Content>
                         <Card.Header>{fullName}</Card.Header>
