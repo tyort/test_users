@@ -23,25 +23,6 @@ export default class UserRepository {
     this.limitCountUsers = count;
   }
 
-  async setInitialOrder() {
-    this.dbUsers = await this.prisma.User.findMany({});
-    const idCounts = this.dbUsers.map((user) => user.id);
-
-    const orderForDB = idCounts.reduce(
-      (accumulator, currentValue) => `${accumulator}o${currentValue}`,
-      ''
-    );
-
-    const orderItemFromDB = await this.prisma.Order.create({
-      data: {
-        order: orderForDB.slice(1),
-      },
-    });
-
-    this.order = orderItemFromDB.order;
-    console.log(this.order);
-  }
-
   async getAllUsers() {
     const users = await this.prisma.User.findMany({
       take: Number(this.limitCountUsers),
