@@ -15,9 +15,5 @@ model User {
   friendsCount Int
   isVisible    Boolean
   isChecked    Boolean
-}
-
-model Order {
-  id    Int @id @default(autoincrement())
-  order String
+  order        Int      @unique
 }
