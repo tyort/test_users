@@ -37,6 +37,7 @@ next-env.d.ts
 
 # DB
 *.db
+*.db-journal
 
 #packaje.json
 /package-lock.json

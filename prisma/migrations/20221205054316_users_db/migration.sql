@@ -8,3 +8,9 @@ CREATE TABLE "User" (
     "isVisible" BOOLEAN NOT NULL,
     "isChecked" BOOLEAN NOT NULL
 );
+
+-- CreateTable
+CREATE TABLE "Order" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "order" TEXT NOT NULL
+);

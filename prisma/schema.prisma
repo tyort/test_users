@@ -16,3 +16,8 @@ model User {
   isVisible    Boolean
   isChecked    Boolean
 }
+
+model Order {
+  id    Int @id @default(autoincrement())
+  order String
+}
