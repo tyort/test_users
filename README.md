@@ -1,5 +1,9 @@
 ## Описание работы приложения
-1.
+1. Добавляем данные в БД. Последовательно реализуем запросы: 
+http://localhost:3002/create-users,
+http://localhost:3002/create-order
+
+2. Запускаем серверы
 Запуск бэкэнда: npm run server. http://localhost:3002/;
 Запуск фронтенда: npm run dev. http://localhost:3000/;
 

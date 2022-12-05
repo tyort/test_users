@@ -11,6 +11,16 @@ app.use(cors());
 app.use(express.json());
 const PORT = 3002;
 
+app.get('/create-users', async (req, res) => {
+  await userRepository.createUsers();
+  res.send('Пользователи созданы');
+});
+
+app.get('/create-order', async (req, res) => {
+  await userRepository.setInitialOrder();
+  res.send('Очередь создана');
+});
+
 app.get('/', async (req, res) => {
   userRepository.setLimitCountUsers(req.query.limit);
   const data = await userRepository.getAllUsers();
