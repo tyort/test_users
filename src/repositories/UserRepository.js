@@ -120,9 +120,31 @@ export default class UserRepository {
     });
   }
 
+  async getSearchedUsers(title) {
+    const item = await this.prisma.Search.upsert({
+      where: { id: 1 },
+      update: { title },
+      create: { id: 1, title },
+    });
+
+    const allUsers = await this.prisma.User.findMany({});
+
+    if (item.title !== '') {
+      const regExpName = new RegExp(item.title, 'gmi');
+      this.searchedUsers = allUsers
+        .filter((user) => !!user.fullName.match(regExpName))
+        .map((user) => user.id);
+    } else {
+      this.searchedUsers = allUsers.map((user) => user.id);
+    }
+
+    return item;
+  }
+
   async getAllUsers() {
     if (this.isShowUnchecked && this.isShowUnchecked.isShow) {
       this.dbUsers = await this.prisma.User.findMany({
+        where: { id: { in: this.searchedUsers } },
         orderBy: {
           order: 'asc',
         },
@@ -130,7 +152,9 @@ export default class UserRepository {
       });
     } else {
       this.dbUsers = await this.prisma.User.findMany({
-        where: { isChecked: true },
+        where: {
+          AND: [{ isChecked: true }, { id: { in: this.searchedUsers } }],
+        },
         orderBy: {
           order: 'asc',
         },

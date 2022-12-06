@@ -23,7 +23,6 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/showunchecked', async (req, res) => {
-  console.log(req.query.isShow)
   try {
     const visability = await userRepository.letChangeVisibility(
       req.query.isShow
@@ -52,6 +51,12 @@ app.post('/checkedboxes', async (req, res) => {
   } catch (e) {
     console.log(e.message);
   }
+});
+
+app.get('/search', async (req, res) => {
+  const item = await userRepository.getSearchedUsers(req.query.search);
+  const usersSearched = await userRepository.getAllUsers();
+  res.json({ usersSearched, item });
 });
 
 app.listen(PORT);

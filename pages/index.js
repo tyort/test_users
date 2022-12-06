@@ -12,6 +12,26 @@ function Home() {
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
   const [isShowUnchecked, setShowUnchecked] = useState('not_determined');
+  const [searchTitle, setSearchTitle] = useState('');
+  const [isBtnClick, setBtnClick] = useState(false);
+
+  console.log(searchTitle);
+
+  const handleFieldChange = (evt) => {
+    const { value } = evt.target;
+    setSearchTitle(value);
+  };
+
+  useEffect(() => {
+    if (isBtnClick) {
+      axios
+        .get(`http://localhost:3002/search/?search=${searchTitle}`)
+        .then((res) => {
+          setUsers(res.data.usersSearched);
+          setBtnClick(false);
+        });
+    }
+  }, [isBtnClick]);
 
   console.log(users);
   useEffect(() => {
@@ -100,10 +120,17 @@ function Home() {
         <Menu secondary>
           <Menu.Menu position='right'>
             <Menu.Item>
-              <Input icon='search' placeholder='Введите имя' />
+              <Input
+                name='title'
+                onChange={handleFieldChange}
+                icon='search'
+                placeholder='Введите имя'
+              />
             </Menu.Item>
             <Menu.Item>
-              <Button>Поиск пользователей</Button>
+              <Button onClick={() => setBtnClick(true)}>
+                Поиск пользователей
+              </Button>
             </Menu.Item>
           </Menu.Menu>
         </Menu>
