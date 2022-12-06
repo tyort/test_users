@@ -26,6 +26,51 @@ export default class UserRepository {
     this.limitCountUsers = count;
   }
 
+  // async setShowCheckbox(isShow) {
+  //   if (isShow === 'not_determined') {
+  //     this.isShowDB = await this.prisma.ShowUnchecked.findUnique({
+  //       where: { id: 1 },
+  //     });
+  //   } else {
+  //     this.isShowDB = await this.prisma.ShowUnchecked.upsert({
+  //       where: { id: 1 },
+  //       update: { isShow: Boolean(isShow) },
+  //       create: { id: 1, isShow: Boolean(isShow) },
+  //     });
+  //   }
+
+  //   return this.isShowDB.isShow;
+  // }
+
+  async setInitialVisability() {
+    this.isShowDB = await this.prisma.ShowUnchecked.findUnique({
+      where: { id: 1 },
+    });
+    return this.isShowDB ? this.isShowDB.isShow : false;
+  }
+
+  async letChangeVisibility() {
+    if (this.isShowDB === null || this.isShowDB.isShow) {
+      await this.prisma.User.updateMany({
+        where: {
+          OR: [{ isChecked: false }, { isChecked: true }],
+        },
+        data: {
+          isVisible: true,
+        },
+      });
+    } else {
+      await this.prisma.User.updateMany({
+        where: {
+          isChecked: false,
+        },
+        data: {
+          isVisible: false,
+        },
+      });
+    }
+  }
+
   letChangeOrders(changedUsers) {
     this.changedUsers = changedUsers;
     const usersWithCurrentOrder = this.changedUsers.map((user, index) => ({

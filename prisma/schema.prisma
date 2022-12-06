@@ -17,3 +17,8 @@ model User {
   isChecked    Boolean
   order        Int
 }
+
+model ShowUnchecked {
+  id     Int     @id
+  isShow Boolean
+}

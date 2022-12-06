@@ -22,6 +22,20 @@ app.get('/', async (req, res) => {
   res.json(data);
 });
 
+app.get('/showunchecked', async (req, res) => {
+  try {
+    if (req.query.isShow === `not_determined`) {
+      const initialVisability = await userRepository.setInitialVisability();
+      await userRepository.letChangeVisibility();
+      res.json(initialVisability);
+    }
+    // const data = await userRepository.setShowCheckbox(req.query.isShow);
+    res.json('Йоу');
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 app.post('/', async (req, res) => {
   try {
     await Promise.all(userRepository.letChangeOrders(req.body));

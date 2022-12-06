@@ -11,6 +11,16 @@ function Home() {
   const [modifiedCheckboxes, setModifiedCheckboxes] = useState([]);
   const [currentCount, setCurrentCount] = useState(8);
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
+  const [isShowUnchecked, setShowUnchecked] = useState('not_determined');
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3002/showunchecked/?isShow=${isShowUnchecked}`)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setShowUnchecked(res.data);
+  //     });
+  // }, [isShowUnchecked]);
 
   useEffect(() => {
     if (modifiedCheckboxes.length !== 0) {
@@ -72,6 +82,9 @@ function Home() {
   };
 
   useEffect(() => {
+    axios
+      .get(`http://localhost:3002/showunchecked/?isShow=${isShowUnchecked}`)
+      .then((res) => setShowUnchecked(res.data));
     document.addEventListener('scroll', scrollhandler);
     // eslint-disable-next-line func-names
     return function () {
@@ -92,10 +105,16 @@ function Home() {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
-        <Checkbox
-          style={{ marginTop: '2em' }}
-          label='Показать только отмеченные'
-        />
+        {isShowUnchecked !== 'not_determined' && (
+          <Checkbox
+            style={{ marginTop: '2em' }}
+            label='Показать только отмеченные'
+            defaultChecked={isShowUnchecked}
+            onChange={(_event, data) => {
+              setShowUnchecked(data.checked);
+            }}
+          />
+        )}
         <section className='page-user-cards'>
           <Reorder.Group
             className='page-user-cards__list'

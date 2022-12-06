@@ -9,3 +9,9 @@ CREATE TABLE "User" (
     "isChecked" BOOLEAN NOT NULL,
     "order" INTEGER NOT NULL
 );
+
+-- CreateTable
+CREATE TABLE "ShowUnchecked" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "isShow" BOOLEAN NOT NULL
+);
