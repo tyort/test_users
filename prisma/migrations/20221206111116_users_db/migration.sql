@@ -15,3 +15,9 @@ CREATE TABLE "ShowUnchecked" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "isShow" BOOLEAN NOT NULL
 );
+
+-- CreateTable
+CREATE TABLE "Search" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL
+);

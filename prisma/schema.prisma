@@ -22,3 +22,7 @@ model ShowUnchecked {
   id     Int     @id
   isShow Boolean
 }
+model Search {
+  id     Int     @id
+  title  String
+}
