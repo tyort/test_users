@@ -5,7 +5,6 @@ export default class UserRepository {
   constructor({ users }) {
     this.prisma = prisma;
     this.mockUsers = users;
-    this.dbUsers = [];
     this.dbReorderedUsers = [];
     this.limitCountUsers = null;
     this.order = '';
@@ -26,35 +25,40 @@ export default class UserRepository {
     this.limitCountUsers = count;
   }
 
-  // async setShowCheckbox(isShow) {
-  //   if (isShow === 'not_determined') {
-  //     this.isShowDB = await this.prisma.ShowUnchecked.findUnique({
-  //       where: { id: 1 },
-  //     });
-  //   } else {
-  //     this.isShowDB = await this.prisma.ShowUnchecked.upsert({
-  //       where: { id: 1 },
-  //       update: { isShow: Boolean(isShow) },
-  //       create: { id: 1, isShow: Boolean(isShow) },
-  //     });
-  //   }
-
-  //   return this.isShowDB.isShow;
-  // }
-
-  async setInitialVisability() {
-    this.isShowDB = await this.prisma.ShowUnchecked.findUnique({
+  async changeShowCheckbox(isShowing) {
+    const item = await this.prisma.ShowUnchecked.findUnique({
       where: { id: 1 },
     });
-    return this.isShowDB ? this.isShowDB.isShow : false;
+
+    let isShow;
+
+    if (item === null) {
+      isShow = isShowing === 'not_determined';
+    }
+
+    if (item !== null && isShowing === 'not_determined') {
+      isShow = item.isShow;
+    }
+
+    if (item !== null && isShowing === 'true') {
+      isShow = true;
+    }
+
+    if (item !== null && isShowing === 'false') {
+      isShow = false;
+    }
+
+    this.isShowUnchecked = await this.prisma.ShowUnchecked.upsert({
+      where: { id: 1 },
+      update: { isShow },
+      create: { id: 1, isShow },
+    });
   }
 
-  async letChangeVisibility() {
-    if (this.isShowDB === null || this.isShowDB.isShow) {
+  async letChangeVisibility(isShowing) {
+    await this.changeShowCheckbox(isShowing);
+    if (this.isShowUnchecked.isShow) {
       await this.prisma.User.updateMany({
-        where: {
-          OR: [{ isChecked: false }, { isChecked: true }],
-        },
         data: {
           isVisible: true,
         },
@@ -69,6 +73,8 @@ export default class UserRepository {
         },
       });
     }
+
+    return this.isShowUnchecked.isShow;
   }
 
   letChangeOrders(changedUsers) {
@@ -91,27 +97,48 @@ export default class UserRepository {
   letChangeCheckboxes(changedCheckboxes) {
     this.changedCheckboxes = Array.from(new Map(changedCheckboxes));
 
-    return this.changedCheckboxes.map((user) =>
-      this.prisma.User.update({
+    return this.changedCheckboxes.map((user) => {
+      let isVisible;
+
+      if (!this.isShowUnchecked) {
+        isVisible = true;
+      }
+      if (this.isShowUnchecked && !this.isShowUnchecked.isShow && !user[1]) {
+        isVisible = false;
+      }
+      if (this.isShowUnchecked && this.isShowUnchecked.isShow) {
+        isVisible = true;
+      }
+
+      return this.prisma.User.update({
         where: { id: Number(user[0]) },
         data: {
           isChecked: { set: user[1] },
+          isVisible,
         },
-      })
-    );
+      });
+    });
   }
 
   async getAllUsers() {
-    const users = await this.prisma.User.findMany({
-      orderBy: {
-        order: 'asc',
-      },
-      take: Number(this.limitCountUsers),
-    });
-
-    this.dbUsers = users;
+    if (this.isShowUnchecked && this.isShowUnchecked.isShow) {
+      this.dbUsers = await this.prisma.User.findMany({
+        orderBy: {
+          order: 'asc',
+        },
+        take: Number(this.limitCountUsers),
+      });
+    } else {
+      this.dbUsers = await this.prisma.User.findMany({
+        where: { isChecked: true },
+        orderBy: {
+          order: 'asc',
+        },
+        take: Number(this.limitCountUsers),
+      });
+    }
     // eslint-disable-next-line no-console
     console.log('Количество отображаемых пользоватлей:', this.limitCountUsers);
-    return users;
+    return this.dbUsers;
   }
 }

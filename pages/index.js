@@ -13,18 +13,23 @@ function Home() {
   const [fetching, setFetching] = useState(true); // true- подгружаем данные
   const [isShowUnchecked, setShowUnchecked] = useState('not_determined');
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3002/showunchecked/?isShow=${isShowUnchecked}`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setShowUnchecked(res.data);
-  //     });
-  // }, [isShowUnchecked]);
+  console.log(users);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3002/showunchecked/?isShow=${isShowUnchecked}`)
+      .then((res) => {
+        setUsers(res.data.usersVisual);
+        setShowUnchecked(res.data.visability);
+      });
+  }, [isShowUnchecked]);
 
   useEffect(() => {
     if (modifiedCheckboxes.length !== 0) {
-      axios.post(`http://localhost:3002/checkedboxes`, modifiedCheckboxes);
+      axios
+        .post(`http://localhost:3002/checkedboxes`, modifiedCheckboxes)
+        .then((res) => {
+          setUsers(res.data);
+        });
     }
   }, [modifiedCheckboxes]);
 
@@ -82,9 +87,6 @@ function Home() {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3002/showunchecked/?isShow=${isShowUnchecked}`)
-      .then((res) => setShowUnchecked(res.data));
     document.addEventListener('scroll', scrollhandler);
     // eslint-disable-next-line func-names
     return function () {
@@ -108,7 +110,7 @@ function Home() {
         {isShowUnchecked !== 'not_determined' && (
           <Checkbox
             style={{ marginTop: '2em' }}
-            label='Показать только отмеченные'
+            label='Показать неотмеченные'
             defaultChecked={isShowUnchecked}
             onChange={(_event, data) => {
               setShowUnchecked(data.checked);

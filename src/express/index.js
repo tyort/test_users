@@ -23,14 +23,13 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/showunchecked', async (req, res) => {
+  console.log(req.query.isShow)
   try {
-    if (req.query.isShow === `not_determined`) {
-      const initialVisability = await userRepository.setInitialVisability();
-      await userRepository.letChangeVisibility();
-      res.json(initialVisability);
-    }
-    // const data = await userRepository.setShowCheckbox(req.query.isShow);
-    res.json('Йоу');
+    const visability = await userRepository.letChangeVisibility(
+      req.query.isShow
+    );
+    const usersVisual = await userRepository.getAllUsers();
+    res.json({ visability, usersVisual });
   } catch (e) {
     console.log(e.message);
   }
@@ -48,7 +47,8 @@ app.post('/', async (req, res) => {
 app.post('/checkedboxes', async (req, res) => {
   try {
     await Promise.all(userRepository.letChangeCheckboxes(req.body));
-    res.send('Все чекбоксы обновлены');
+    const usersVisual = await userRepository.getAllUsers();
+    res.json(usersVisual);
   } catch (e) {
     console.log(e.message);
   }
